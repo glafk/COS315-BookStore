@@ -12,6 +12,7 @@ namespace BookStore.Controllers
     {
         public IActionResult Index()
         {
+            var loggedUser = HttpContext.User.Identity.Name;
             return View();
         }
 

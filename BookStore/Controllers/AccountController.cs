@@ -57,7 +57,8 @@ namespace BookStore.Controllers
         {
             if(ModelState.IsValid)
             {
-                var signInResult = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+                //Sign in reslut succeeds but the user is not logged in to the session
+                var signInResult = await signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
 
                 if(signInResult.Succeeded)
                 {

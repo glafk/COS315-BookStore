@@ -19,6 +19,7 @@ namespace BookStore
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -49,6 +50,8 @@ namespace BookStore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var serviceProvider = 
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -80,6 +83,18 @@ namespace BookStore
                 app.UseHsts();
             }
 
+            var serviceProvider = app.ApplicationServices;
+
+            using (var scope = serviceProvider.CreateScope())
+            {
+                //Create admin role
+                CreateRoles(serviceProvider).Wait();
+
+                //Add the administrator role to the admin account
+                AddAdminToRole(serviceProvider).Wait();
+            }
+
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
@@ -90,6 +105,32 @@ namespace BookStore
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        public async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            using (var scope = serviceProvider.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                var adminRoleExists = roleManager.RoleExistsAsync("Administrator");
+                if (!adminRoleExists.Result)
+                {
+                    await roleManager.CreateAsync(new IdentityRole("Administrator"));
+                }
+            }
+        }
+
+        public async Task AddAdminToRole(IServiceProvider serviceProvider)
+        {
+            using (var scope = serviceProvider.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+
+                var admin = await userManager.FindByNameAsync("dglavinkoff@gmail.com");
+
+                await userManager.AddToRoleAsync(admin, "Administrator");
+            }
         }
     }
 }

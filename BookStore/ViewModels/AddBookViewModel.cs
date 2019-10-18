@@ -14,9 +14,12 @@ namespace BookStore.ViewModels
         [Required]
         public string Title { get; set; }
 
+        public string Author { get; set; }
+
         [Required]
         public string Description { get; set; }
 
+        [Required]
         public int Category { get; set; }
 
         [Required]

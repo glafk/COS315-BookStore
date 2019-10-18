@@ -14,6 +14,7 @@ namespace BookStore.Models
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
             base.OnModelCreating(builder);
         }
 

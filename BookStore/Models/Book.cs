@@ -15,6 +15,9 @@ namespace BookStore.Models
         public string Title { get; set; }
 
         [Required]
+        public string Author { get; set; }
+
+        [Required]
         public string Description { get; set; }
 
         [Required]
@@ -23,6 +26,7 @@ namespace BookStore.Models
         [Required]
         public double Price { get; set; }
 
-
+        [Required]
+        public Category Category { get; set; }
     }
 }
