@@ -13,13 +13,11 @@ namespace BookStore.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
-        private readonly RoleManager<IdentityRole> roleManager;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
-            this.roleManager = roleManager;
         }
 
         [HttpGet]
@@ -31,15 +29,23 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            //Check if there are any errors in the registration form
             if(ModelState.IsValid)
             {
+                //Create new user in the database
                 var user = new User { UserName = model.Email };
                 var newUserCreation = await userManager.CreateAsync(user, model.Password);
 
+                //Sign in the user if creation was successful
                 if(newUserCreation.Succeeded)
                 {
                     await signInManager.SignInAsync(user, true);
                     return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    //Add error to be displayed to the userif the there are errors in the form
+                    ModelState.AddModelError("PasswordReq", "Password must be at least 8 characters long and include an uppercase character, a lowercase character, a number and a special symbol");
                 }
             }
 
@@ -57,12 +63,16 @@ namespace BookStore.Controllers
         {
             if(ModelState.IsValid)
             {
-                //Sign in reslut succeeds but the user is not logged in to the session
-                var signInResult = await signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
+                //Attemp to sign in the user with the given password
+                var signInResult = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
                 if(signInResult.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("LogOnError", "Username or password is incorrect.");
                 }
             }
             return View(model);

@@ -107,6 +107,7 @@ namespace BookStore
             });
         }
 
+        //Create an admin role using the role manager
         public async Task CreateRoles(IServiceProvider serviceProvider)
         {
             using (var scope = serviceProvider.CreateScope())
@@ -121,6 +122,7 @@ namespace BookStore
             }
         }
 
+        //Add the admin role to the administrator account
         public async Task AddAdminToRole(IServiceProvider serviceProvider)
         {
             using (var scope = serviceProvider.CreateScope())

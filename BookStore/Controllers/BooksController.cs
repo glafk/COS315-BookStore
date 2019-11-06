@@ -28,7 +28,6 @@ namespace BookStore.Controllers
         [HttpGet]
         public IActionResult AddBook()
         {
-            bool isAdmin = HttpContext.User.IsInRole("Administrator");  
             AddBookViewModel model = new AddBookViewModel {
                 Categories = new SelectList(categoriesService.GetAllCategories(), "Id", "Name")
             };
