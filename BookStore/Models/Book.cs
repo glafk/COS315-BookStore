@@ -27,6 +27,6 @@ namespace BookStore.Models
         public double Price { get; set; }
 
         [Required]
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
     }
 }

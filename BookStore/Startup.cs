@@ -96,6 +96,7 @@ namespace BookStore
 
 
             app.UseHttpsRedirection();
+            app.UseIdentity();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 

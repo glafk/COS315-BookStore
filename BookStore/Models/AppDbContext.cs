@@ -12,10 +12,11 @@ namespace BookStore.Models
         public AppDbContext(DbContextOptions<AppDbContext> options)
                 : base(options) { }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder builder) 
         {
-
             base.OnModelCreating(builder);
+            builder.Entity<Category>()
+                .HasMany(b => b.Books);
         }
 
         public DbSet<Book> Books { get; set; }    

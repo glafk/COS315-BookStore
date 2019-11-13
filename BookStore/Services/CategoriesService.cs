@@ -1,4 +1,5 @@
 ﻿using BookStore.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,14 @@ namespace BookStore.Services
 
         public CategoriesService()
         {
-            this._context = new AppDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<AppDbContext>());
+            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=BookStoreDB;Trusted_Connection=True;MultipleActiveResultSets=true");
+            this._context = new AppDbContext(optionsBuilder.Options);
         }
 
         public List<Category> GetAllCategories()
         {
+
             return new List<Category>(_context.Categories.ToList());
         }
 
