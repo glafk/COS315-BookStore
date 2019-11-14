@@ -33,7 +33,14 @@ namespace BookStore.Controllers
             if(ModelState.IsValid)
             {
                 //Create new user in the database
-                var user = new User { UserName = model.Email };
+                var user = new User
+                {
+                    UserName = model.Email,
+                    Address = model.Address,
+                    FullName = model.FullName,
+                    CreditCardLegalName = model.CreditCardLegalName,
+                    CreditCardSVC = model.CeditCardSVC
+                };
                 var newUserCreation = await userManager.CreateAsync(user, model.Password);
 
                 //Sign in the user if creation was successful

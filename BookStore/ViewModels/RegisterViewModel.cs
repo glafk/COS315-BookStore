@@ -30,8 +30,8 @@ namespace BookStore.ViewModels
         public string CreditCardNumber { get; set; } 
 
         [Required]
-        [DisplayName("Credit Card CVS")]
-        public string CeditCardCVS { get; set; }
+        [DisplayName("Credit Card SVC")]
+        public string CeditCardSVC { get; set; }
 
         [Required]
         [DisplayName("Credit Card Full Legal Name")]

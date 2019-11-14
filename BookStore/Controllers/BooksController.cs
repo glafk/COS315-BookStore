@@ -21,6 +21,7 @@ namespace BookStore.Controllers
 
         public BooksController()
         {
+
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
             optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=BookStoreDB;Trusted_Connection=True;MultipleActiveResultSets=true");
             this._context = new AppDbContext(optionsBuilder.Options);
@@ -60,6 +61,7 @@ namespace BookStore.Controllers
                     var addBook = _context.Books.Add(newBook);
                     _context.SaveChanges();
                     ViewBag.Message = "Book created successfully.";
+                    model.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name");
                     return View(model);
                 }
                 catch(Exception ex)
