@@ -130,7 +130,7 @@ namespace BookStore
             {
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 
-                var admin = await userManager.FindByNameAsync("dglavinkoff@gmail.com");
+                var admin = await userManager.FindByNameAsync("fnm180@aubg.edu");
 
                 await userManager.AddToRoleAsync(admin, "Administrator");
             }

@@ -39,7 +39,7 @@ namespace BookStore.Controllers
                     Address = model.Address,
                     FullName = model.FullName,
                     CreditCardLegalName = model.CreditCardLegalName,
-                    CreditCardSVC = model.CeditCardSVC
+                    CreditCardSVC = model.CeditCardCVS
                 };
                 var newUserCreation = await userManager.CreateAsync(user, model.Password);
 
