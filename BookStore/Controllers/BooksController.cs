@@ -107,5 +107,10 @@ namespace BookStore.Controllers
             var model = await _context.Books.ToListAsync();
             return View(model);
         }
+
+        public async Task<IActionResult> ReadReviews(int? id)
+        {
+            return View(await _context.Review.Where(review => review.BookID == id).Include(review => review.book).Where(review => review.book.Id == id).ToListAsync());
+        }
     }
 }

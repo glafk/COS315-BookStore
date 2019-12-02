@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookStore.Models;
 
 namespace BookStore.Models
 {
@@ -22,5 +23,7 @@ namespace BookStore.Models
         public DbSet<Book> Books { get; set; }    
 
         public DbSet<Category> Categories { get; set; }
+
+        public DbSet<BookStore.Models.Review> Review { get; set; }
     }
 }

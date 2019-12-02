@@ -11,8 +11,9 @@ namespace BookStore.Models
     {
         [Key]
         public int Id { get; set; }
+        public Book book { get; set; }
 
-        [ForeignKey("Book.Id")]
+        [ForeignKey("Books")]
         public int BookID { get; set; }
 
         [Required]

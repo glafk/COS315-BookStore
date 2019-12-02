@@ -1,0 +1,47 @@
+﻿@model IEnumerable<BookStore.Models.Review>
+
+@{
+    ViewData["Title"] = ViewBag.Title;// "Review";
+}
+
+<h2>@Model.ElementAt(0).book.Title.ToString()</h2>
+<h4>Reviews</h4>
+
+<p>
+    <a asp-action="CreateReview" asp-route-id="@Model.ElementAt(0).book.Id">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerReview)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReviewDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    @Html.TextAreaFor(modelItem => item.CustomerReview, new { @class = "form-control", @maxlength = "20", @readonly = "readonly" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReviewDate)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
