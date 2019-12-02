@@ -1,4 +1,4 @@
-﻿@model BookStore.Models.Book
+﻿@model BookStore.ViewModels.BookCustomer
 
 @{
     ViewData["Title"] = "Details";
@@ -9,40 +9,87 @@
 <div>
     <h4>Book</h4>
     <hr />
-    <dl class="dl-horizontal">
+
+    <dl id="tbl" class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Book.Title)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Book.Title)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Author)
+            @Html.DisplayNameFor(model => model.Book.Author)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Author)
+            @Html.DisplayFor(model => model.Book.Author)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Book.Description)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Book.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.QuantityAvailable)
+            @Html.DisplayNameFor(model => model.Book.QuantityAvailable)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.QuantityAvailable)
+            @Html.DisplayFor(model => model.Book.QuantityAvailable)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Price)
+            @Html.DisplayNameFor(model => model.Book.Price)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Price)
+            $@Html.DisplayFor(model => model.Book.Price)
         </dd>
     </dl>
+
+
+    @{
+        String handlePurchase = "if (confirm(\'Are you sure you want to Purchase the item?\')) { $(\'modal\').modal(\'toggle\'); var div = document.createElement(\'div\'); div.className = \'bg-success\'; var text = \'Your purchase was successful!\'; div.appendChild(text); document.getElementById(\'tbl\').insertBefore(div, document.getElementById(\'tbl\').nextSibling);  }";
+    }
+
+    <script type="text/javascript">
+        function HandlePurchase() {
+            if (confirm('Are you sure you want to Purchase the item?')) {
+                $('#modal').modal('hide');
+                var msg_div = document.createElement("div");
+                msg_div.className = `alert alert-success center-block text-center`;
+                msg_div.innerHTML = "Your purchase of '@Model.Book.Title' was successful! Your book will be delivered to the following address: @Model.User.Address";
+                document.getElementById('tbl').insertBefore(msg_div, document.getElementById('tbl').firstChild); // droebit
+            }
+        }
+    </script>
+
+    <div class="col-md-6 text-center">
+        <a href="#" class="btn btn-primary" onclick="$('#modal').modal('toggle');">Purchase</a>
+    </div>
+
+    <div id="modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#337ab7;color:#ffffff">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">BookStore Notice</h4>
+                </div>
+                <div class="modal-body form-group">
+                    <h5>Please select a credit/debit card you would like to use for purchasing the book.</h5>
+                    <select name="card">
+                        <option value="1">@Model.User.CreditCardNumber</option>
+                    </select>
+                </div>
+                <p class="text text-warning">  You will be charged: $@Model.Book.Price</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                    <a class="btn btn-primary pull-left" href="#" onclick="HandlePurchase()">Purchase</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <br />
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Book.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
