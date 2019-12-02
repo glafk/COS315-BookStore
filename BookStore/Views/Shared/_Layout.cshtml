@@ -29,11 +29,39 @@
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">BookStore</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
-                    <li><a asp-area="" asp-controller="Account" asp-action="Login">Login</a></li>
-                </ul>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Customer"))
+                {
+                    <ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-area="" asp-controller="Books" asp-action="Index">Books</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><p>Logged in as: @User.Identity.Name</p></li>
+                        <li class="pull-right"><a asp-area="" asp-controller="Account" asp-action="Logout">Log out</a></li>
+                    </ul>
+                }
+                else if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+                {
+                    <ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-area="" asp-controller="Books" asp-action="Index">Books</a></li>
+                        <li><a asp-area="" asp-controller="Categories" asp-action="Create">Categories</a></li>
+                        <li><a asp-area="" asp-controller="Users" asp-action="Index">Users</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><p>Logged in as: @User.Identity.Name</p></li>
+                        <li class="pull-right"><a asp-area="" asp-controller="Account" asp-action="Logout">Log out</a></li>
+                    </ul>
+                }
+                else
+                {
+                    <ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Login">Login</a></li>
+                    </ul>
+                }
+
             </div>
         </div>
     </nav>
