@@ -11,6 +11,5 @@ namespace BookStore.ViewModels
         [Required]
         public string Name { get; set; }
 
-
     }
 }

@@ -102,9 +102,32 @@ namespace BookStore.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string category, string searchString, int? pageNumber)
         {
-            var model = await _context.Books.ToListAsync();
+            //Get all books and categories from the database
+            var categories = await _context.Categories.ToListAsync();
+            var books = from book in _context.Books select book;
+            //Storing the filters in viewdata object
+
+            ViewData["CategoryFilter"] = !String.IsNullOrEmpty(category) ? category : "All";
+            ViewData["CurrentFilter"] = searchString;
+
+
+            //Get the books only from the requested category.
+            if (!String.IsNullOrEmpty(category) && category != "All")
+            {
+                books = books.Where(b => b.Category.Name == category);
+            }
+
+            //Search the title for the given search string
+            if (!String.IsNullOrEmpty(searchString)){
+                books = books.Where(b => b.Title.Contains(searchString));
+            }
+
+
+
+            Tuple<IEnumerable<Category>, PaginatedList<Book>> model = new Tuple<IEnumerable<Category>, PaginatedList<Book>>(categories, await PaginatedList<Book>.CreateAsync(books.AsNoTracking().Include(b => b.Category), pageNumber ?? 1, 10));
+
             return View(model);
         }
 

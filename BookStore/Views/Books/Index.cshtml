@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BookStore.Models.Book>
+﻿@model Tuple<IEnumerable<Category>, PaginatedList<Book>>
 
 @{
     ViewData["Title"] = "Book Catalogue";
@@ -6,43 +6,87 @@
 
 <h2>Book Catalogue</h2>
 
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+            <input type="hidden" name="category" value="@ViewData["CategoryFilter"]">
+        </p>
+    </div>
+</form>
+
+<div>
+    Find by category:
+    @foreach (var category in Model.Item1)
+    {
+        <div>
+            <a asp-action="Index" asp-route-category="@category.Name">@category.Name</a>
+        </div>
+    }
+<div>
+    <a asp-action="Index" asp-route-category="All">All</a>
+</div>
+</div>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                Title
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                Author
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Author)
+                Category
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                Price
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Author)
-            </td>
-            <td>
-                $@Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.ActionLink("Details", "Details", new { id=item.Id }) 
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Item2)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = item.Id })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.Item2.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Item2.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-pageNumber="@(Model.Item2.PageIndex - 1)"
+   asp-route-searchString="@ViewData["CurrentFilter"]"
+   asp-route-category="@ViewData["CategoryFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-pageNumber="@(Model.Item2.PageIndex + 1)"
+   asp-route-category="@ViewData["CategoryFilter"]"
+   asp-route-searchString="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
