@@ -7,9 +7,11 @@ using BookStore.Models;
 using BookStore.Services;
 using BookStore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace BookStore.Controllers
 {
@@ -17,15 +19,17 @@ namespace BookStore.Controllers
     {
 
         private AppDbContext _context;
+        private UserManager<User> _userManager;
         private CategoriesService categoriesService;
 
-        public BooksController()
+        public BooksController(UserManager<User> userManager)
         {
 
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
             optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=BookStoreDB;Trusted_Connection=True;MultipleActiveResultSets=true");
             this._context = new AppDbContext(optionsBuilder.Options);
             categoriesService = new CategoriesService();
+            _userManager = userManager;
         }
 
 
@@ -83,14 +87,25 @@ namespace BookStore.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (book == null)
+            var model = new BookCustomer
+            {
+                Book = await _context.Books
+                .FirstOrDefaultAsync(m => m.Id == id),
+                User = await _userManager.GetUserAsync(HttpContext.User)
+            };
+
+            if (model.Book == null)
             {
                 return NotFound();
             }
 
-            return View(book);
+            return View(model);
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var model = await _context.Books.ToListAsync();
+            return View(model);
         }
     }
 }
