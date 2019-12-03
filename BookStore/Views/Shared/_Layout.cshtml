@@ -29,25 +29,17 @@
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">BookStore</a>
             </div>
             <div class="navbar-collapse collapse">
-                @if (User.Identity.IsAuthenticated && User.IsInRole("Customer"))
+                @if (User.Identity.IsAuthenticated)
                 {
-                    <ul class="nav navbar-nav">
-                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li><a asp-area="" asp-controller="Books" asp-action="Index">Books</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><p class="text-info">Logged in as: @User.Identity.Name</p></li>
-                        <li class="pull-right"><a asp-area="" asp-controller="Account" asp-action="Logout">Log out</a></li>
-                    </ul>
-                }
-                else if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
-                {
-                    <ul class="nav navbar-nav">
-                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li><a asp-area="" asp-controller="Books" asp-action="Index">Books</a></li>
+                <ul class="nav navbar-nav">
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="" asp-controller="Books" asp-action="Index">Books</a></li>
+                    @if(User.IsInRole("Administrator"))
+                    { 
                         <li><a asp-area="" asp-controller="Categories" asp-action="Create">Categories</a></li>
                         <li><a asp-area="" asp-controller="Users" asp-action="Index">Users</a></li>
-                    </ul>
+                    }
+                </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><p class="text-info">Logged in as: @User.Identity.Name</p></li>
                         <li class="pull-right"><a asp-area="" asp-controller="Account" asp-action="Logout">Log out</a></li>

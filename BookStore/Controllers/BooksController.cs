@@ -107,8 +107,8 @@ namespace BookStore.Controllers
             //Get all books and categories from the database
             var categories = await _context.Categories.ToListAsync();
             var books = from book in _context.Books select book;
-            //Storing the filters in viewdata object
 
+            //Storing the filters in viewdata object
             ViewData["CategoryFilter"] = !String.IsNullOrEmpty(category) ? category : "All";
             ViewData["CurrentFilter"] = searchString;
 
