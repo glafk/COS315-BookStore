@@ -133,7 +133,14 @@ namespace BookStore.Controllers
 
         public async Task<IActionResult> ReadReviews(int? id)
         {
-            return View(await _context.Review.Where(review => review.BookID == id).Include(review => review.book).Where(review => review.book.Id == id).ToListAsync());
+            var reviews = await _context.Review.Where(review => review.BookID == id).Include(review => review.book).Where(review => review.book.Id == id).ToListAsync();
+            if (reviews.Count == null || reviews.Count == 0)
+            {
+                return NotFound();
+            } else
+            {
+                return View(reviews);
+            }
         }
     }
 }
