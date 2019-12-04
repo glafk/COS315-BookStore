@@ -33,10 +33,12 @@
                 {
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Books" asp-action="Index">Books</a></li>
-                    @if(User.IsInRole("Administrator"))
-                    { 
+                    @if (User.IsInRole("Administrator"))
+                    {
                         <li><a asp-area="" asp-controller="Categories" asp-action="Create">Categories</a></li>
                         <li><a asp-area="" asp-controller="Users" asp-action="Index">Users</a></li>
+                        <li><a asp-area="" asp-controller="Books" asp-action="AddBook">Add Book</a></li>
+                        <li><a asp-area="" asp-controller="Reviews" asp-action="Create">Add Review</a></li>
                     }
                 </ul>
                     <ul class="nav navbar-nav navbar-right">
