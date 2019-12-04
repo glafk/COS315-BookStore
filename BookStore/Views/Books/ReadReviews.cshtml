@@ -8,7 +8,7 @@
 <h4>Reviews</h4>
 
 <p>
-    <a asp-action="CreateReview" asp-route-id="@Model.ElementAt(0).book.Id">Create New</a>
+    @*<a asp-action="CreateReview" asp-route-id="@Model.ElementAt(0).book.Id">Create New</a>*@
 </p>
 <table class="table">
     <thead>
@@ -39,7 +39,7 @@
                     @Html.DisplayFor(modelItem => item.ReviewDate)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Details" asp-route-id="@Model.ElementAt(0).book.Id">Details</a>
                 </td>
             </tr>
         }
