@@ -124,8 +124,7 @@ namespace BookStore.Controllers
                 books = books.Where(b => b.Title.Contains(searchString));
             }
 
-
-
+            //Create the model for the view
             Tuple<IEnumerable<Category>, PaginatedList<Book>> model = new Tuple<IEnumerable<Category>, PaginatedList<Book>>(categories, await PaginatedList<Book>.CreateAsync(books.AsNoTracking().Include(b => b.Category), pageNumber ?? 1, 10));
 
             return View(model);
