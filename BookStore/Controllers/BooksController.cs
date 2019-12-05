@@ -66,7 +66,8 @@ namespace BookStore.Controllers
                     _context.SaveChanges();
                     ViewBag.Message = "Book created successfully.";
                     model.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name");
-                    return View(model);
+                    //return View(model);
+                    return RedirectToAction("AddBook");
                 }
                 catch(Exception ex)
                 {
@@ -140,6 +141,50 @@ namespace BookStore.Controllers
             {
                 return View(reviews);
             }
+        }
+
+        [HttpGet]
+        public IActionResult AddReview(int id)
+        {
+            AddReviewModel model = new AddReviewModel
+            {
+                BookID = id
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult AddReview(AddReviewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var newReview = new Review
+                {
+                    BookID = _context.Books.Single(x => x.Id == model.BookID).Id,
+                    Rating = model.Rating,
+                    CustomerReview = model.CustomerReview,
+                    ReviewDate = DateTime.Now
+                };
+
+                try
+                {
+                    var addReview = _context.Review.Add(newReview);
+                    _context.SaveChanges();
+                    ViewBag.Message = "Review created successfully.";
+                    //model.BookID = _context.Books.First().Id;
+                    return RedirectToAction("ReadReviews", new { id = newReview.BookID });
+                }
+                catch (Exception ex)
+                {
+                    //Refactor to display proper message
+                    ViewBag.Message = ex.Message;
+                    return RedirectToAction("Index");
+                }
+
+            }
+
+            return View();
         }
     }
 }
